@@ -34,7 +34,7 @@ cp -r /path/to/v46/. v46
 
 ## 2. Pythonバージョンの設定
 
-バージョンは3.11.3を使っていますが、3.11以降の全てのバージョンで実行可能だと思います。
+バージョンは3.11.3を使っていますが、3.11以降の全てのバージョンで実行可能
 
 ## 3. ライブラリのインストール
 
@@ -60,4 +60,4 @@ uv sync
 
 ## 4. コードの実行
 
-pydeck_selenium.ipynbでも、pydeck_seleniumでも同じ結果が得られます。
+pydeck_selenium.ipynbでも、pydeck_seleniumでも同じ結果が得られる
