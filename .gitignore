@@ -12,5 +12,5 @@ wheels/
 .venv
 
 # output files
-v46
-!v46/.gitkeep
+v46/**
+!./v46/.gitkeep
