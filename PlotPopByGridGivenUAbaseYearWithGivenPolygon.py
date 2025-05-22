@@ -283,7 +283,7 @@ geojson = pdk.Layer(
 # r = pdk.Deck(layers=[polygon,geojson],map_provider="mapbox",\
 #              api_keys={'mapbox':'pk.eyJ1IjoidG9tb3lhLW1vcmkiLCJhIjoiY2xwN21rczJuMXozNjJrcXY5enRxOWZyeCJ9.7vI4I8etICPpEnbFrZ8pHA'},\
 #              map_style='mapbox://styles/tomoya-mori/clp7n37kd00g601r6fpji0cod',initial_view_state=view_state)
-r = pdk.Deck(layers=[polygon,geojson],initial_view_state=view_state,map_provider='none')
+r = pdk.Deck(layers=[polygon,geojson],initial_view_state=view_state)
 
 r.to_html(outfig,css_background_color=(bgcolor))
 
