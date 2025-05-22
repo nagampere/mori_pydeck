@@ -15,6 +15,9 @@ ua = 5
 min_pop = 100
 buffer_size = .1
 
+buffer_y = 0.1 # move the center of the map in the latitude direction
+size_x = 1000
+size_y = 1400
 
 
 background = 'none'
@@ -91,6 +94,10 @@ import seaborn as sns
 import colorcet as cc
 import string
 import warnings
+from selenium import webdriver
+from selenium.webdriver.chrome.options import Options
+import time
+
 warnings.simplefilter('ignore')
 print(basedir)
 print('Background color', background)
@@ -130,7 +137,7 @@ dfc = gpd.overlay(coast,dfuab,how='intersection')
 dfmu =gpd.overlay(df,dfc,how='intersection')
 
 geo_center = (dfua.unary_union.centroid.x,\
-              dfua.unary_union.centroid.y)
+              dfua.unary_union.centroid.y - buffer_y)
 
 view_state = pdk.ViewState(
     **{"latitude": geo_center[1], "longitude":geo_center[0],\
@@ -279,3 +286,21 @@ geojson = pdk.Layer(
 r = pdk.Deck(layers=[polygon,geojson],initial_view_state=view_state,map_provider='none')
 
 r.to_html(outfig,css_background_color=(bgcolor))
+
+# Chrome headlessモード設定
+options = Options()
+options.add_argument("--headless")
+options.add_argument(f"--window-size={size_x},{size_y}")
+
+# Chrome Driver起動
+driver = webdriver.Chrome(options=options)
+driver.get("file://" + os.path.abspath(outfig))
+
+# レンダリング待ち（時間調整可能）
+time.sleep(5)
+
+# スクリーンショット保存
+driver.save_screenshot(outpng)
+driver.quit()
+
+print("Saved figure to", outpng)
