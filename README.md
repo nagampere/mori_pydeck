@@ -15,10 +15,30 @@
 
 # 画像
 
-<img src="map_capture.png" alt="map_capture.png" width="400"/>
+<img src="output/fig_tenjin-density_intermediate_min-pop_100_wo_map_2120.png" alt="map_capture.png" width="400"/>
+
+# 【研究ディレクトリで作業する場合】環境構築とコード実行
+
+## 1. ライブラリの追加
+
+ライブラリの差分は[selenium](https://anaconda.org/conda-forge/selenium)のみになります。
+
+```{bash}
+conda install conda-forge::selenium
+```
+
+もしchromedriver関連でエラーが発生する場合は、お使いのPCにchromeをダウンロードするか、[参考記事](https://qiita.com/Chronos2500/items/7f56898af25523d04598)からchromedriverを設定してください。
+
+## 2. コードのダウンロード
+
+https://github.com/nagampere/mori_pydeck/blob/main/PlotPopByGridGivenUAbaseYearWithGivenPolygon.py から、ダウンロードしてください。
+
+以下の画像のように、GitHubのページから「Download raw file」をクリックしてください。
+
+<img src="download_code.png" alt="download_code.png" width="400"/>
 
 
-# 【作業中】環境構築とコード実行
+# 【当ディレクトリで作業する場合】環境構築とコード実行
 
 コードはテストファイルを対象に、実行しています。
 
