@@ -12,6 +12,15 @@
 5. selenium上の仮想ブラウザで、HTMLファイルを開く
 6. スクリーンショットした結果を保存
 
+# ファイルのダウンロード
+
+都道府県・市区町村を可視化するために、境界データをdropboxからダウンロードする。
+
+- japan_ver85：https://www.esrij.com/products/japan-shp/
+- japan_cities.geojson, japan_prefectures.geojson：japan_names.py（またはjapan_names.ipynb）から出力する
+
+https://www.dropbox.com/scl/fo/inana9ahhsqwhoy95abky/APBZEnr1Se15ISbxABDY6x0?rlkey=0059kjzrug4udl2ze1es0x5u2&st=4i9wnj7p&dl=0
+
 
 # 画像
 
