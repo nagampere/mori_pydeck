@@ -49,7 +49,7 @@ size_y = 1400
 
 
 
-background = 'none'
+background = 'none' # 'web' or 'none'
 
 if background == 'web':
     bgcolor = '#fffcf9'
@@ -90,7 +90,6 @@ cell_file = os.path.join(basedir, 'ua_cells_prediction_1970-2200.csv')
 # outfig = outdir + 'fig_cities_' + pred_type + '_min-pop_' +\
 # str(min_pop)+ '_wo_map_' +  str(year) + '.html'
 outfig = os.path.join(outdir, f'fig_tenjin-density_radius-{radius}m_in_ua_{ua}_base-year_{base_year}_{ver}_{pred_type}_bgcolor_{background}_{year}.html')
-
 outpng = os.path.join(outdir, f'fig_tenjin-density_{pred_type}_min-pop_{min_pop}_wo_map_{year}.png')
 
 marker_size = 10
@@ -219,9 +218,6 @@ filtered_centroids = df_centroids.copy()
 
 
 # %%
-dfua.plot()
-
-# %%
 
 color_column = []
 for i in df.index:
@@ -252,18 +248,46 @@ for i in df.index:
 
 
 # %%
+# 市区町村のポリゴンを読み込む
+gdf_jpn = gpd.read_file("japan_cities.geojson")
+# テキストレイヤー用の GeoDataFrame を作成
+gdf_text = gpd.GeoDataFrame(
+    gdf_jpn.drop(columns=['geometry']),
+    geometry=gpd.GeoSeries.from_xy(
+        gdf_jpn['lon'], 
+        gdf_jpn['lat'],
+        crs=gdf_jpn.crs
+    ),
+    crs=gdf_jpn.crs
+)
+
+
+# %%
 df['FILL_COLOR'] = color_column
 #dfc['FILL_COLOR']= [[245,222,179]]
 dfc['FILL_COLOR']= bgcolor
-
 dfc['EDGE_COLOR'] = [[0,0,0]]
 dfc['ELV'] = 0
 
+
+text_layer = pdk.Layer(
+    "TextLayer",
+    data=gdf_text,
+    get_position="geometry.coordinates",
+    get_size=16,
+    get_color=[0,0,0],
+    get_text="NAME_EN",
+    parameters={
+        "depthTest": False
+    }
+)
+
+# 都道府県境界のポリゴンレイヤーを作成
 polygon = pdk.Layer(
     "GeoJsonLayer",
-    data=dfc,
-    opacity=0.2,    
-    filled=False,
+    data=gdf_jpn,
+    opacity=0.1,    
+    filled=True,
     stroked=True,
     extruded=True,
     wireframe=True,    
@@ -273,7 +297,7 @@ polygon = pdk.Layer(
     # lineWidthUnits='pixels',
     # lineWidthMinPixels=10,
     get_elevation="0",
-    get_fill_color="none",
+    get_fill_color=[255,255,255],
     get_line_color="EDGE_COLOR")
 
 geojson = pdk.Layer(
@@ -295,13 +319,48 @@ geojson = pdk.Layer(
     get_line_color="FILL_COLOR"
 )
 
-# r = pdk.Deck(layers=[polygon,geojson],map_provider="mapbox",\
-#              api_keys={'mapbox':'pk.eyJ1IjoidG9tb3lhLW1vcmkiLCJhIjoiY2xwN21rczJuMXozNjJrcXY5enRxOWZyeCJ9.7vI4I8etICPpEnbFrZ8pHA'},\
-#              map_style='mapbox://styles/tomoya-mori/clp7n37kd00g601r6fpji0cod',initial_view_state=view_state)
-r = pdk.Deck(layers=[polygon,geojson],initial_view_state=view_state,map_provider='none')
 
-r.to_html(outfig,css_background_color=(bgcolor))
+# %%
+# [0]:'None', [1]:'light-v8', [2]:'light-v10'
+map_style_name= ['None', 'light-v8', 'light-v10'][2] 
+if map_style_name == 'None':
+    map_style = None # basemapのスタイルを指定しない
+elif map_style_name == 'light-v8':
+    map_style = 'mapbox://styles/mapbox/light-v8' # 地名の表示が少なめ
+elif map_style_name == 'light-v10':
+    map_style = 'mapbox://styles/mapbox/light-v10' # 地名の表示が多め
+else:
+    raise ValueError("Invalid map style specified. Choose from 'None', 'light-v8', or 'light-v10'.")
 
+# [1]:'bndry-and-text', [0]:'bndry',  [2]:'pop-only'
+layer_style_name = ['bndry-and-text', 'bndry', 'pop-only'][1] 
+if layer_style_name == 'bndry-and-text':
+    layers = [polygon, text_layer, geojson] # 地名の表示を追加、下から境界データ、地名、人口データの順に表示
+elif layer_style_name == 'bndry':
+    layers = [polygon, geojson] # 地名の表示を削除
+elif layer_style_name == 'pop-only':
+    layers = [geojson] # 人口データのみを表示
+else:
+    raise ValueError("Invalid layer style specified. Choose from 'bndry-only', 'bndry-and-text', or 'pop-only'.")
+
+# 出力ファイル名の設定
+outfig = os.path.join(outdir, f'fig_tenjin-density_radius-{radius}m_in_ua_{ua}_base-year_{base_year}_{ver}_{pred_type}_bgcolor_{background}_{year}.html')
+outpng = os.path.join(outdir, f'fig_tenjin-density_{pred_type}_min-pop_{min_pop}_wo_map_{year}.png')
+outfig = outfig.replace('.html', f'_{map_style_name}_{layer_style_name}.html')
+outpng = outpng.replace('.png',f'_{map_style_name}_{layer_style_name}.png')
+
+# Create the deck.gl map
+r = pdk.Deck(
+    layers=layers,
+    map_provider="mapbox",
+    api_keys={'mapbox':'pk.eyJ1IjoibmFnYW1wZXJlIiwiYSI6ImNtYmNhdGdzZjFpeWUya3MxZGVvcjliajUifQ.wvUEbvy9G_ZyUz_KTmGwBQ'},
+    initial_view_state=view_state,
+    )
+
+r.map_style = map_style
+
+
+r.to_html(outfig)
 
 # %%
 # Chrome headlessモード設定
@@ -321,6 +380,7 @@ driver.save_screenshot(outpng)
 driver.quit()
 
 print("Saved figure to", outpng)
+
 
 # %%
 
