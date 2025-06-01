@@ -25,17 +25,27 @@ view_state = pdk.ViewState(
     longitude=-1.415,
     latitude=52.2323,
     zoom=6,
-    min_zoom=5,
-    max_zoom=15,
+    # min_zoom=5,
+    # max_zoom=15,
     pitch=40.5,
     bearing=-27.36)
 
-# Combined all of it and render a viewport
-r = pdk.Deck(layers=[layer], initial_view_state=view_state)
-r.map_style = "mapbox://styles/mapbox/light-v9"
+# pdk.settings.mapbox_api_key = "sk.eyJ1IjoibmFnYW1wZXJlIiwiYSI6ImNtYmNhamxqZzFuNmYybXMxa2ZkZ3NvbncifQ.qcZTiDoJAR2FN_pSRnVvVA"
+
+# map_styleをDeckに渡す
+r = pdk.Deck(
+    layers=[layer], 
+    initial_view_state=view_state, 
+    map_provider="mapbox", 
+    api_keys={'mapbox':"pk.eyJ1IjoibmFnYW1wZXJlIiwiYSI6ImNtYmNhdGdzZjFpeWUya3MxZGVvcjliajUifQ.wvUEbvy9G_ZyUz_KTmGwBQ"}
+    )
+
+# Set the Mapbox access token
+# r.map_style = "mapbox://styles/nagampere/cmbc4lpvt000601r3a8ml52md"
+r.map_style = "mapbox://styles/mapbox/light-v9" 
 
 # Save the map to an HTML file
-r.to_html('deck_map.html', open_browser=False)
+r.to_html('deck_map.html')
 
 # %%
 # Chrome headlessモード設定

@@ -33,13 +33,30 @@
     const container = document.getElementById('deck-container');
     const jsonInput = {
   "initialViewState": {
-    "latitude": 35.6812,
-    "longitude": 139.7671,
-    "pitch": 45,
-    "zoom": 11
+    "bearing": -27.36,
+    "latitude": 52.2323,
+    "longitude": -1.415,
+    "pitch": 40.5,
+    "zoom": 6
   },
-  "layers": [],
-  "mapProvider": "carto",
+  "layers": [
+    {
+      "@@type": "HexagonLayer",
+      "autoHighlight": true,
+      "coverage": 1,
+      "data": "https://raw.githubusercontent.com/visgl/deck.gl-data/master/examples/3d-heatmap/heatmap-data.csv",
+      "elevationRange": [
+        0,
+        3000
+      ],
+      "elevationScale": 50,
+      "extruded": true,
+      "getPosition": "@@=[lng, lat]",
+      "id": "ee397551-2cad-4bbb-9e98-262eb561605a",
+      "pickable": true
+    }
+  ],
+  "mapProvider": "mapbox",
   "mapStyle": "mapbox://styles/mapbox/light-v9",
   "views": [
     {
@@ -53,6 +70,7 @@
     const configuration = null;
 
     const deckInstance = createDeck({
+            mapboxApiKey: 'pk.eyJ1IjoibmFnYW1wZXJlIiwiYSI6ImNtYmNhdGdzZjFpeWUya3MxZGVvcjliajUifQ.wvUEbvy9G_ZyUz_KTmGwBQ',
                   container,
       jsonInput,
       tooltip,
