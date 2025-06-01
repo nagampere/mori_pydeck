@@ -3,15 +3,16 @@ name = "mori-pydeck"
 version = "0.1.0"
 description = "Add your description here"
 readme = "README.md"
-requires-python = ">=3.11.3"
+requires-python = ">=3.12"
 dependencies = [
     "colorcet>=3.1.0",
     "geopandas>=1.0.1",
     "mapclassify>=2.8.1",
     "matplotlib>=3.10.3",
     "notebook>=7.4.2",
+    "osmnx>=2.0.3",
     "pandas>=2.2.3",
-    "pydeck>=0.9.1",
+    "pydeck==0.9.1",
     "seaborn>=0.13.2",
     "selenium>=4.32.0",
 ]
