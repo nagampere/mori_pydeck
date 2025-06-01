@@ -15,7 +15,36 @@
 
 # 画像
 
-<img src="output/fig_tenjin-density_intermediate_min-pop_100_wo_map_2120.png" alt="map_capture.png" width="400"/>
+ポイント①：BaseMapの設定
+- r.map_styleで設定
+- 設定しない場合はNone
+- 地名の表示が少なめの場合は、mapbox://styles/mapbox/light-v8
+- 地名の表示が多めの場合は、mapbox://styles/mapbox/light-v10
+- 自作のbasemapは地物タイルが読み込みされない、Mapboxのエラー？今後修正される？
+
+
+ポイント②：地名の設定
+- TextLayerで設定
+- parameter={"depthTest": False}で、3Dマップ上の重なりを無視（※設定しないと他レイヤーに埋没する）
+- Layersの順番を下から境界ポリゴン、地名、人口に設定（[polygon, text_layer, geojson]）
+
+【1.BaseMap無し + 地名レイヤー有り】
+
+ファイル名：output/fig_tenjin-density_intermediate_min-pop_100_wo_map_2120_None_bndry-and-text.png
+
+<img src="output/fig_tenjin-density_intermediate_min-pop_100_wo_map_2120_None_bndry-and-text.png" alt="map_capture.png" width="400"/>
+
+【2.light-v8 + 地名レイヤー無し】
+
+ファイル名：output/fig_tenjin-density_intermediate_min-pop_100_wo_map_2120_light-v8_bndry.png
+
+<img src="output/fig_tenjin-density_intermediate_min-pop_100_wo_map_2120_light-v8_bndry.png" alt="map_capture.png" width="400"/>
+
+【3.light-v10 + 地名レイヤー無し】
+
+ファイル名：output/fig_tenjin-density_intermediate_min-pop_100_wo_map_2120_light-v10_bndry.png
+
+<img src="output/fig_tenjin-density_intermediate_min-pop_100_wo_map_2120_light-v10_bndry.png" alt="map_capture.png" width="400"/>
 
 # 【研究ディレクトリで作業する場合】環境構築とコード実行
 
