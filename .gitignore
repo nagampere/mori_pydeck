@@ -19,3 +19,6 @@ Map/**
 coastline_wgs84
 japan_ver85
 output/**.html
+
+japan_cities.geojson
+japan_prefectures.geojson
