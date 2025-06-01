@@ -18,4 +18,4 @@ Map/**
 !Map/.gitkeep
 coastline_wgs84
 japan_ver85
-
+output/**.html
